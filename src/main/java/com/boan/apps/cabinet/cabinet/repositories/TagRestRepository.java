@@ -9,6 +9,9 @@ import org.springframework.data.rest.core.annotation.RestResource;
 import java.util.List;
 import java.util.UUID;
 
-@RepositoryRestResource(path = "tags")
-public interface TagRestRepository extends PagingAndSortingRepository<Tag, UUID> {
+// Disable Tags Repository for now because otherwise Spring Rest defaults to use hyperlinks to the domain of tags rather than inline data
+
+@RepositoryRestResource(exported = false)
+// @RepositoryRestResource(path = "tags")
+public interface TagRestRepository extends PagingAndSortingRepository<Tag, String> {
 }

@@ -11,7 +11,8 @@ import java.util.UUID;
 
 //@RepositoryRestResource(path = "cards")
 //@RepositoryRestResource(path="card")
-public interface CardRestRepository extends PagingAndSortingRepository<Card, UUID> {
+//@RepositoryRestResource(exported = false)
+public interface CardRestRepository extends PagingAndSortingRepository<Card, String> {
     //    List<Tag> findByKey(@Param("key") String key);
     Page<Card> findByText(String name, Pageable pageable);
 }

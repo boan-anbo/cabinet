@@ -8,6 +8,7 @@ import org.springframework.stereotype.Indexed;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -29,17 +30,26 @@ public class Card implements Serializable {
     @Column(name = "id", nullable = false)
     String id;
 
-    @Column(name = "extra", nullable = true)
-    String extra;
-    @Column(name = "Text", nullable = false)
-    String Text;
+    @Column(name = "extra", nullable = false)
+    String extra = "";
+
+    @Column(name="modified", nullable = false)
+    Date modified = new Date();
+
+    @Column(name="created", nullable = false)
+    Date created = new Date();
+
+
+    @Column(name = "text", nullable = false)
+    String text;
+
 
     @ManyToMany(
             fetch = FetchType.EAGER,
             cascade = CascadeType.ALL
 
     )
-    Set<Tag> tags = new HashSet<Tag>();
+    public Set<Tag> tags = new HashSet<Tag>();
 
     @ManyToMany(
             fetch = FetchType.EAGER,
@@ -47,4 +57,17 @@ public class Card implements Serializable {
 
     )
     public Set<Comment> comments = new HashSet<Comment>();
+
+    @ManyToOne(
+            fetch=FetchType.EAGER
+    )
+            @JoinColumn(name = "source_id")
+    Source source;
+
+
+
+    public Card(Source _source) {
+        source = _source;
+        modified = source.getModified();
+    }
 }

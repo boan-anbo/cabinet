@@ -29,8 +29,8 @@ public class Comment implements Serializable {
     @Column(name = "id", nullable = false)
     String id;
 
-    @Column(name = "extra", nullable = true)
-    String extra;
+    @Column(name = "extra", nullable = false)
+    String extra ="";
 
     @Column(name = "Text", nullable = false)
     String Text = "";

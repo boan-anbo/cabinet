@@ -1,5 +1,6 @@
 package com.boan.apps.cabinet.cabinet.services;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,12 +21,25 @@ public class PdfServiceTest {
     private PdfService pdfService;
 
     @Test
+    public void extractPdf() throws IOException {
+
+        var testFile = new File(filePath);
+        assertTrue(testFile.exists());
+
+        var extractPdf = pdfService.ExtractPdf(testFile.getAbsolutePath());
+        ObjectMapper mapper = new ObjectMapper();
+        System.out.println(mapper.writerWithDefaultPrettyPrinter().writeValueAsString(extractPdf))        ;
+    }
+
+    @Test
     public void extractAndStorePdf() throws IOException {
 
         var testFile = new File(filePath);
         assertTrue(testFile.exists());
 
-        var pdfDoc = pdfService.ExtractPdf(testFile.getAbsolutePath());
-        assertTrue(pdfDoc.annotations.size() > 0);
+        var cards = pdfService.ExtractAndStorePdf(testFile.getAbsolutePath());
+        ObjectMapper mapper = new ObjectMapper();
+        System.out.println(mapper.writerWithDefaultPrettyPrinter().writeValueAsString(cards))        ;
     }
+
 }

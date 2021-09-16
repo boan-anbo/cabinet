@@ -1,5 +1,6 @@
 package com.boan.apps.cabinet.cabinet.entities;
 
+import com.boan.apps.cabinet.tagger.models.TagExtract;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -30,10 +31,10 @@ public class Tag  implements Serializable {
     @Column(name = "id", nullable = false)
     String id;
 
-    @Column(name = "extra", nullable = true)
-    String extra;
+    @Column(name = "extra", nullable = false)
+    String extra ="";
 
-    @Column(name = "Key", nullable = false, unique = true)
+    @Column(name = "Key", nullable = false )
     String key;
     @Column(name = "Value", nullable = true)
     String value;
@@ -46,4 +47,10 @@ public class Tag  implements Serializable {
             cascade = CascadeType.ALL)
     Set<Card> cards = new HashSet<Card>();
 
+    public Tag(TagExtract _tag) {
+        key  = _tag.getTagKey();
+        value = _tag.getTagValue();
+        note = _tag.getTagNote();
+
+    }
 }
