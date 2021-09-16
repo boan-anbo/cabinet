@@ -12,13 +12,13 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-@Table(name = "Cards")
+@Table(name = "Comments")
 @Entity
 @Getter
 @Setter
 @Indexed
 @NoArgsConstructor
-public class Card implements Serializable {
+public class Comment implements Serializable {
 
     @Id
     @GeneratedValue(generator = "UUID")
@@ -31,20 +31,15 @@ public class Card implements Serializable {
 
     @Column(name = "extra", nullable = true)
     String extra;
+
     @Column(name = "Text", nullable = false)
-    String Text;
+    String Text = "";
 
     @ManyToMany(
             fetch = FetchType.EAGER,
-            cascade = CascadeType.ALL
+            cascade = CascadeType.ALL,
 
+            mappedBy= "comments"
     )
-    Set<Tag> tags = new HashSet<Tag>();
-
-    @ManyToMany(
-            fetch = FetchType.EAGER,
-            cascade = CascadeType.ALL
-
-    )
-    public Set<Comment> comments = new HashSet<Comment>();
+    Set<Card> cards = new HashSet<Card>();
 }

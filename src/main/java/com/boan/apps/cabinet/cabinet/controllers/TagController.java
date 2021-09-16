@@ -1,9 +1,9 @@
 package com.boan.apps.cabinet.cabinet.controllers;
 
-import com.boan.apps.cabinet.cabinet.dtos.ExtractRequest;
+import com.boan.apps.cabinet.cabinet.dtos.ParseRequest;
 import com.boan.apps.cabinet.cabinet.repositories.TagRestRepository;
 import com.boan.apps.cabinet.tagger.Tagger;
-import com.boan.apps.cabinet.tagger.models.ExtractResult;
+import com.boan.apps.cabinet.tagger.models.ParseResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -21,7 +21,7 @@ public class TagController {
     }
 
     @PostMapping("test")
-    public ExtractResult Test(@Valid @RequestBody ExtractRequest request) {
+    public ParseResult Test(@Valid @RequestBody ParseRequest request) {
 
 
 //        var newTag = new Tag();

@@ -1,17 +1,17 @@
 package com.boan.apps.cabinet.cabinet.services;
 
 import com.boan.apps.cabinet.tagger.Tagger;
-import com.boan.apps.cabinet.tagger.models.ExtractResult;
+import com.boan.apps.cabinet.tagger.models.ParseResult;
 import org.springframework.stereotype.Service;
 
 @Service
-public class ExtractorService {
+public class TaggerService {
 
-    public ExtractResult extractTagsFromText(String text) {
+    public ParseResult extractTagsFromText(String text) {
         return extractTagsFromText(text, true);
     }
 
-    public ExtractResult extractTagsFromText(String text, boolean replace) {
+    public ParseResult extractTagsFromText(String text, boolean replace) {
         return Tagger.process(text, replace);
     }
 }

@@ -9,8 +9,8 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 
 @Data
-public class ExtractRequest {
-    public ExtractRequest() {
+public class ParseRequest {
+    public ParseRequest() {
     }
 
     @NotNull

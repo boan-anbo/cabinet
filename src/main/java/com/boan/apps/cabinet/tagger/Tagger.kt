@@ -1,6 +1,6 @@
 package com.boan.apps.cabinet.tagger
 
-import com.boan.apps.cabinet.tagger.models.ExtractResult
+import com.boan.apps.cabinet.tagger.models.ParseResult
 import com.boan.apps.cabinet.tagger.models.TagExtract
 
 
@@ -10,7 +10,7 @@ class Tagger {
     companion object {
         @JvmStatic
         @JvmOverloads
-        fun process(text:String, replace: Boolean=true): ExtractResult {
+        fun process(text:String, replace: Boolean=true): ParseResult {
             val tags = TagExtractor.extractTags(text);
 
             var replacedText = text
@@ -19,7 +19,7 @@ class Tagger {
                 replacedText = this.replaceTags(replacedText, tags)
             }
 
-            return ExtractResult(
+            return ParseResult(
                 replacedText,
                 tags,
                 replace
