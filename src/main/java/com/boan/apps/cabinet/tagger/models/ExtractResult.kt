@@ -8,4 +8,5 @@ data class ExtractResult(
     val replaced: Boolean
 ) {
     val extractDate = Date()
+    val hasResult = tags.isNotEmpty()
 }

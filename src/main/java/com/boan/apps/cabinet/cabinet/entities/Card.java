@@ -4,23 +4,22 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.GenericGenerator;
-import org.springframework.data.rest.core.annotation.RepositoryRestResource;
+import org.springframework.stereotype.Indexed;
 
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.UUID;
 
-@Table(name = "Tags")
+@Table(name = "Cards")
 @Entity
 @Getter
 @Setter
+@Indexed
 @NoArgsConstructor
-public class Tag  implements Serializable {
+public class Card implements Serializable {
 
-    // Shared
     @Id
     @GeneratedValue(generator = "UUID")
     @GenericGenerator(
@@ -32,18 +31,14 @@ public class Tag  implements Serializable {
 
     @Column(name = "extra", nullable = true)
     String extra;
-
-    @Column(name = "Key", nullable = false, unique = true)
-    String key;
-    @Column(name = "Value", nullable = true)
-    String value;
-    @Column(name = "Note", nullable = true)
-    String note;
+    @Column(name = "Text", nullable = false)
+    String Text;
 
     @ManyToMany(
-            fetch = FetchType.LAZY,
-            mappedBy = "tags",
-            cascade = CascadeType.ALL)
-    Set<Card> cards = new HashSet<Card>();
+            fetch = FetchType.EAGER,
+            cascade = CascadeType.ALL
 
+    )
+
+    Set<Tag> tags = new HashSet<Tag>();
 }
