@@ -4,8 +4,8 @@ import com.boan.apps.cabinet.cabinet.dtos.ExtractPdfRequest;
 import com.boan.apps.cabinet.cabinet.dtos.SaveResults;
 import com.boan.apps.cabinet.cabinet.services.PdfService;
 import com.boan.apps.cabinet.cabinet.services.TaggerService;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.validation.Valid;
 import java.io.IOException;
 
-@Api(value = "Extract Pdf and store annotations as cards and notes", tags = "Extract Pdf Controller")
+@Tag(description = "Extract Pdf and store annotations as cards and notes", name = "Extract Pdf Controller")
 @RequestMapping("extract")
 @RestController
 public class PdfExtractorController {
@@ -30,7 +30,7 @@ public class PdfExtractorController {
 
 
     @SneakyThrows
-    @ApiOperation(value = "Extract and store pdf.")
+    @Operation(description = "Extract and store pdf.")
     @PostMapping
     public SaveResults extractAndStorePdf(@Valid @RequestBody ExtractPdfRequest request) throws IOException {
 
