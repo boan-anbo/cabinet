@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 @Service
 public class PdfService {
@@ -35,21 +36,27 @@ public class PdfService {
     }
 
 
-    public List<Card> ExtractAndStorePdf(String filePath) throws IOException {
+    public int ExtractAndStorePdf(List<String> filePaths) throws IOException {
 
-        var pdfDoc = ExtractPdf(filePath);
-        List<Card> results = new ArrayList<Card>();
+        AtomicInteger totalCards = new AtomicInteger();
+        for (int i = 0; i < filePaths.size(); i++) {
 
-        if (pdfDoc.annotations.size() > 0) {
-            var saved = StoreAnnotations(pdfDoc);
-            results.addAll(saved);
+            var pdfDoc = ExtractPdf(filePaths.get(i));
+
+            if (pdfDoc.annotations.size() > 0) {
+                var cardsSaved = StoreAnnotations(pdfDoc);
+               totalCards.addAndGet(cardsSaved.get());
+            }
         }
 
-        return results;
+
+        return totalCards.get();
     }
 
-    public List<Card> StoreAnnotations(PdfDocument pdfDoc) {
+    public AtomicInteger StoreAnnotations(PdfDocument pdfDoc) {
         List<Card> results =  new ArrayList<Card>();
+
+        AtomicInteger counter = new AtomicInteger();
 
         var source = new Source(pdfDoc);
 
@@ -84,14 +91,15 @@ public class PdfService {
                 });
             }
 
-            var savedCard = cardRepo.save(newCard);
+            cardRepo.save(newCard);
 
             System.out.println(pdfDoc.getId());
 
-            results.add(savedCard);
+            counter.getAndIncrement();
+
 
         });
-        return results;
+        return  counter;
     }
 
 

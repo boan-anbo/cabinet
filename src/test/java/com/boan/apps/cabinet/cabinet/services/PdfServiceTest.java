@@ -9,6 +9,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Collections;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 @RunWith(SpringRunner.class)
@@ -37,7 +38,7 @@ public class PdfServiceTest {
         var testFile = new File(filePath);
         assertTrue(testFile.exists());
 
-        var cards = pdfService.ExtractAndStorePdf(testFile.getAbsolutePath());
+        var cards = pdfService.ExtractAndStorePdf(Collections.singletonList(testFile.getAbsolutePath()));
         ObjectMapper mapper = new ObjectMapper();
         System.out.println(mapper.writerWithDefaultPrettyPrinter().writeValueAsString(cards))        ;
     }
