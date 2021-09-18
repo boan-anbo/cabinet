@@ -10,9 +10,6 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 public class Request {
-    public SimpleListProperty<String> filesPaths ;
+    public List<String> filesPaths ;
 
-    public Request( ObservableList<String> observableList) {
-        this.filesPaths = new SimpleListProperty<String>(observableList);
-    }
 }
