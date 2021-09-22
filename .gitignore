@@ -32,3 +32,8 @@ build/
 ### VS Code ###
 .vscode/
 /.jpb/jpb-settings.xml
+/client-generator/cabinet-api-java-client/
+/client-generator/demo/
+/client-generator/java-client/
+/client-generator/pdfgongju.core/
+/client-generator/
