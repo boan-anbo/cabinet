@@ -33,7 +33,6 @@ public class CardController {
     )
     @GetMapping("")
     public CabinetResultMany<Card> getCards(@ParameterObject CabinetCardParams params) {
-        logger.info(String.valueOf(params.getPageSize()));
         return cardService.getCards(params);
     }
 

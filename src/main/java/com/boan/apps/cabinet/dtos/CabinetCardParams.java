@@ -13,12 +13,14 @@ public class CabinetCardParams {
     public boolean includeMarkdown = false;
     public String markdownTitle = "Untitled";
     String search;
-    int page = 0;
-    int pageSize = 30;
     // for searching texts
     Boolean searchExact = false;
+    int page = 0;
+    int pageSize = 30;
     // for things like matching tag key.
     Boolean mactchExact = true;
+    // filters
+    Boolean commentedOnly = false;
 
     public Pageable toPageable() {
         return PageRequest.of(page, pageSize);

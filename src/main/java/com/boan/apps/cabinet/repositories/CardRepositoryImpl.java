@@ -25,21 +25,20 @@ public class CardRepositoryImpl implements CardRepostioryCustom {
     private final int defaultPageSize = 50;
 
     @Override
-    public Page<Card> searchCardText(@Valid @NotEmpty String text, Pageable pageable) {
+    public Page<Card> searchCardText(@Valid @NotEmpty String text, CabinetCardParams params, Pageable pageable) {
 
         QueryResult<Card> queryResult = cardDao.searchCard(text,
-                pageable,
-                false
+                params
         );
 
         return new PageImpl<Card>(queryResult.getResult(), pageable, queryResult.getTotalResults()) {};
     }
 
     @Override
-    public Page<Card> searchCardTextExact(String text, Pageable pageable) {
+    public Page<Card> searchCardTextExact(String text, CabinetCardParams params, Pageable pageable) {
         QueryResult<Card> queryResult = cardDao.searchCard(text,
-                pageable,
-                true
+                params
+
         );
 
         return new PageImpl<Card>(queryResult.getResult(), pageable, queryResult.getTotalResults()) {};
@@ -68,8 +67,8 @@ public class CardRepositoryImpl implements CardRepostioryCustom {
     @Override
     public Page<Card> listCardsByTagKeyMany(List<String> keys, CabinetCardParams params, Pageable pageable) {
         QueryResult<Card> queryResult = cardDao.listCardsByTagKeyMany(keys,
-                pageable,
-                params.getMactchExact()
+                params,
+                pageable
         );
         return new PageImpl<Card>(queryResult.getResult(), pageable, queryResult.getTotalResults()) {};
     }
@@ -93,5 +92,14 @@ public class CardRepositoryImpl implements CardRepostioryCustom {
         );
 
         return new PageImpl<Card>(queryResult.getResult(), pageable, queryResult.getTotalResults()) {};
+    }
+
+    @Override
+    public Page<Card> getAll(CabinetCardParams params) {
+        QueryResult<Card> queryResult = cardDao.getAllCards(
+                params
+        );
+
+        return new PageImpl<Card>(queryResult.getResult(), params.toPageable(), queryResult.getTotalResults()) {};
     }
 }

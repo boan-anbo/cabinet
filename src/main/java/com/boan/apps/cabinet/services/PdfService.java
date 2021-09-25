@@ -5,22 +5,28 @@ import boan.pdfgongju.core.models.ExtractOptions;
 import boan.pdfgongju.core.models.ExtractResult;
 import boan.pdfgongju.core.models.PdfAnnotation;
 import boan.pdfgongju.core.models.PdfDocument;
+import com.boan.apps.cabinet.controllers.CardController;
 import com.boan.apps.cabinet.entities.Card;
 import com.boan.apps.cabinet.entities.Comment;
 import com.boan.apps.cabinet.entities.Source;
 import com.boan.apps.cabinet.entities.Tag;
 import com.boan.apps.cabinet.repositories.CardRepository;
 import com.boan.apps.cabinet.repositories.SourceRestRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
 
 @Service
 public class PdfService {
+
+    Logger logger = LoggerFactory.getLogger(CardController.class);
 
     @Autowired
     private TaggerService taggerService;
@@ -31,7 +37,7 @@ public class PdfService {
 
     private SourceRestRepository sourceRepo;
 
-    public ExtractResult ExtractPdf(String filePath) throws IOException {
+    public Optional<ExtractResult> ExtractPdf(String filePath) throws IOException {
         var opt = new ExtractOptions();
 
         return PdfGongju.extractFullTextByPdfPath(filePath, opt);
@@ -41,21 +47,35 @@ public class PdfService {
     public int ExtractAndStorePdf(List<String> filePaths) throws IOException {
 
         AtomicInteger totalCards = new AtomicInteger();
+
+        AtomicInteger totalFiles = new AtomicInteger();
+
+
         for (String filePath : filePaths) {
 
             var extractResult = ExtractPdf(filePath);
 
-            for (int j = 0; j < extractResult.getExtractedPdf().size(); j++) {
+            if (extractResult.isPresent()) {
 
 
-                var pdfDoc = extractResult.getExtractedPdf().get(j);
+                for (int j = 0; j < extractResult.get().getExtractedPdf().size(); j++) {
 
-                if (pdfDoc.annotations.size() > 0) {
-                    var cardsSaved = StoreAnnotations(pdfDoc);
-                    totalCards.addAndGet(cardsSaved.get());
+
+                    var pdfDoc = extractResult.get().getExtractedPdf().get(j);
+
+                    if (pdfDoc.annotations.size() > 0) {
+                        var cardsSaved = StoreAnnotations(pdfDoc);
+                        totalCards.addAndGet(cardsSaved.get());
+                    }
                 }
+            } else {
+                logger.warn("Skipped. Did not received result for " + filePath);
             }
+
+            totalFiles.addAndGet(1);
         }
+
+        logger.info("Archivization finished. " + totalFiles.get() + " files processed. " + totalCards.get() + " stored.");
 
 
         return totalCards.get();
@@ -113,7 +133,8 @@ public class PdfService {
             counter.getAndIncrement();
 
 
-        };
+        }
+        ;
         return counter;
     }
 

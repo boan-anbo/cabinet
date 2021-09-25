@@ -32,7 +32,7 @@ public class CardService {
         if (search != null && !search.isEmpty()) {
             return getCardsBySearching(params);
         }
-        var result = cardRepo.findAll(params.toPageable());
+        var result = cardRepo.getAll(params);
         return CabinetResultMany.fromPage(result, params);
     }
 
@@ -42,9 +42,9 @@ public class CardService {
         var exact = params.getSearchExact();
         Page<Card> cardsPage = null;
         if (exact == null || !exact) {
-            cardsPage = cardRepo.searchCardText(search, params.toPageable());
+            cardsPage = cardRepo.searchCardText(search, params, params.toPageable());
         } else {
-            cardsPage = cardRepo.searchCardTextExact(search, params.toPageable());
+            cardsPage = cardRepo.searchCardTextExact(search, params, params.toPageable());
         }
 
         return CabinetResultMany.fromPage(cardsPage, params);

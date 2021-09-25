@@ -1,5 +1,6 @@
 package com.boan.apps.cabinet.query;
 
+import com.boan.apps.cabinet.dtos.CabinetCardParams;
 import com.boan.apps.cabinet.entities.Card;
 import com.boan.apps.cabinet.entities.Comment;
 import com.boan.apps.cabinet.entities.Source;
@@ -98,7 +99,7 @@ public class CardDAOTest {
     public void should_Search_By_Text() {
 
 
-        List<Card> computingResult = cardApi.searchCard("Computing", 0, 100).getResult();
+        List<Card> computingResult = cardApi.searchCard("Computing", new CabinetCardParams()).getResult();
         assertThat(cardChina, is(not(in(computingResult))));
         assertThat(cardComputing, is(in(computingResult)));
 
@@ -107,29 +108,30 @@ public class CardDAOTest {
 //        assertThat(100, is(computingSingleResult.size()));
 
 
-        List<Card> chinaResult = cardApi.searchCard("China", 0, 100).getResult();
+        List<Card> chinaResult = cardApi.searchCard("China", new CabinetCardParams()).getResult();
         assertThat(cardChina, is(in(chinaResult)));
         assertThat(cardComputing, is(not(in(chinaResult))));
 
-        List<Card> chinaTagResult = cardApi.searchCard("Chinatag", 0, 100).getResult();
+        List<Card> chinaTagResult = cardApi.searchCard("Chinatag", new CabinetCardParams()).getResult();
         assertThat(cardChina, is(in(chinaTagResult)));
         assertThat(cardComputing, is(not(in(chinaTagResult))));
 
 
-        List<Card> chinaTagChnResult = cardApi.searchCard("中国标签", 0, 100).getResult();
+        List<Card> chinaTagChnResult = cardApi.searchCard("中国标签", new CabinetCardParams()).getResult();
         assertThat(cardChina, is(in(chinaTagChnResult)));
         assertThat(cardComputing, is(not(in(chinaTagChnResult))));
 
-        List<Card> chinaCommentResult = cardApi.searchCard("Chinacomment", 0, 100).getResult();
+        List<Card> chinaCommentResult = cardApi.searchCard("Chinacomment",  new CabinetCardParams()).getResult();
         assertThat(cardChina, is(in(chinaCommentResult)));
         assertThat(cardComputing, is(not(in(chinaCommentResult))));
 
-        List<Card> chinaSourceResult = cardApi.searchCard("Chinasource", 0, 100).getResult();
+        List<Card> chinaSourceResult = cardApi.searchCard("Chinasource", new CabinetCardParams()).getResult();
         assertThat(cardChina, is(in(chinaSourceResult)));
         assertThat(cardComputing, is(not(in(chinaSourceResult))));
 
-
-        List<Card> bothResults = cardApi.searchCard("Card", 0, 100000).getResult();
+        var paramsBoth = new CabinetCardParams();
+        paramsBoth.setPageSize(10000);
+        List<Card> bothResults = cardApi.searchCard("Card", paramsBoth).getResult();
 //        assertThat(cardChina, is(in(bothResults)));
 //        assertThat(cardComputing, is(in(bothResults)));
         assertThat(this.totalChinaCards * 2, is(bothResults.size()));
@@ -141,11 +143,13 @@ public class CardDAOTest {
     public void should_Search_By_Text_Exact() {
 
 
-        List<Card> computingResult = cardApi.searchCard("computing card0", PageRequest.of(0, 1), true).getResult();
+        var paramsExact = new CabinetCardParams();
+        paramsExact.setSearchExact(true);
+        List<Card> computingResult = cardApi.searchCard("computing card0", paramsExact).getResult();
         assertThat(cardChina, is(not(in(computingResult))));
         assertThat(cardComputing, is(in(computingResult)));
 
-        List<Card> chinaResult = cardApi.searchCard("china card0", PageRequest.of(0, 1), true).getResult();
+        List<Card> chinaResult = cardApi.searchCard("china card0", paramsExact).getResult();
         assertThat(cardChina, is(in(chinaResult)));
         assertThat(cardComputing, is(not(in(chinaResult))));
         // the card must also has tag attached.
