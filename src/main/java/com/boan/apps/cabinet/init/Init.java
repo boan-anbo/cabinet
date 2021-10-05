@@ -48,7 +48,8 @@ public class Init implements InitializingBean {
         LOG.info("PostConstruct");
     }
 
-//    @EventListener(ApplicationReadyEvent.class)
+    @EventListener(ApplicationReadyEvent.class)
+
     public void init() {
 
         LOG.info("init-method");

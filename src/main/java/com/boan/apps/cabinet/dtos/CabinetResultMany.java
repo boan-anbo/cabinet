@@ -25,6 +25,13 @@ public class CabinetResultMany<T> {
     public int page;
     public int pageSize;
     public int totalPages;
+    public Boolean hasNextPage;
+    public Boolean hasPrevPage;
+    public Boolean isFirst;
+    public Boolean isLast;
+    public Boolean isEmpty;
+
+
 
     private CabinetResultMany(Page<T> pageInput, CabinetCardParams params) {
 
@@ -33,6 +40,12 @@ public class CabinetResultMany<T> {
         page = pageInput.getNumber();
         pageSize = pageInput.getSize();
         totalPages = pageInput.getTotalPages();
+        hasNextPage = pageInput.hasNext();
+        hasPrevPage = pageInput.hasPrevious();
+        isFirst = pageInput.isFirst();
+        isLast = pageInput.isLast();
+        isEmpty = pageInput.isEmpty();
+
 
 
         if (params.includeMarkdown) {
