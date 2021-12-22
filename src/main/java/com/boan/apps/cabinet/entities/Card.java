@@ -1,5 +1,6 @@
 package com.boan.apps.cabinet.entities;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import lombok.Getter;
@@ -37,9 +38,11 @@ public class Card implements Serializable {
     @Column(name = "extra", nullable = false)
     String extra = "";
 
+    @JsonFormat(shape = JsonFormat.Shape.STRING)
     @Column(name = "modified", nullable = false)
     Date modified = new Date();
 
+    @JsonFormat(shape = JsonFormat.Shape.STRING)
     @Column(name = "created", nullable = false)
     Date created = new Date();
 

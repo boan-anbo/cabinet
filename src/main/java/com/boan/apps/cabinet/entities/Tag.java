@@ -33,8 +33,10 @@ public class Tag  implements Serializable {
 
     @Column(name = "key", nullable = false )
     public String key;
+
     @Column(name = "value", nullable = true)
     public String value;
+
     @Column(name = "note", nullable = true)
     public String note;
 

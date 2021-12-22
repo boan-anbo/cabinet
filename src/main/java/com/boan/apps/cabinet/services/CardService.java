@@ -4,6 +4,7 @@ import com.boan.apps.cabinet.controllers.CardController;
 import com.boan.apps.cabinet.dtos.CabinetCardParams;
 import com.boan.apps.cabinet.dtos.CabinetResultMany;
 import com.boan.apps.cabinet.dtos.CabinetResultOne;
+import com.boan.apps.cabinet.dtos.GetCardsByIdRequest;
 import com.boan.apps.cabinet.entities.Card;
 import com.boan.apps.cabinet.repositories.CardRepository;
 import org.slf4j.Logger;
@@ -12,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -25,6 +27,17 @@ public class CardService {
         var cardsPage = cardRepo.listCardsByTagKeyMany(keys, params, params.toPageable());
         // return keys back to the consumer.
         return CabinetResultMany.fromPage(cardsPage, params, keys);
+    }
+
+    public CabinetResultMany<Card> getCardsById(CabinetCardParams params, GetCardsByIdRequest cardIds) {
+        var search = params.getSearch();
+        if (search != null && !search.isEmpty()) {
+            return getCardsBySearching(params);
+        }
+        var results = cardRepo.findAllById(cardIds.getCardIds());
+        List<Card> cards = new ArrayList<Card>();
+        results.iterator().forEachRemaining(cards::add);
+        return CabinetResultMany.fromList(cards, params);
     }
 
     public CabinetResultMany<Card> getCards(CabinetCardParams params) {

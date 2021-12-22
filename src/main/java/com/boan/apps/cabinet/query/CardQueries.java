@@ -155,6 +155,12 @@ public class CardQueries {
                     card.comments.isNotEmpty()
             );
         }
+        if (params.getFromDate() != null) {
+            baseBooleans.and(card.modified.after(params.getFromDate()));
+        }
+        if (params.getToDate() != null) {
+            baseBooleans.and(card.modified.before(params.getToDate()));
+        }
         return baseBooleans;
 
     }

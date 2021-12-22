@@ -3,7 +3,10 @@ package com.boan.apps.cabinet.dtos;
 import lombok.Data;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.format.annotation.DateTimeFormat;
 
+import java.time.LocalDate;
+import java.util.Date;
 import java.util.Dictionary;
 import java.util.List;
 
@@ -21,6 +24,11 @@ public class CabinetCardParams {
     Boolean mactchExact = true;
     // filters
     Boolean commentedOnly = false;
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+    Date fromDate;
+
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+    Date toDate;
 
     public Pageable toPageable() {
         return PageRequest.of(page, pageSize);

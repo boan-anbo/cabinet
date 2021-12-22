@@ -1,6 +1,7 @@
 package com.boan.apps.cabinet.entities;
 
 import boan.pdfgongju.core.models.PdfDocument;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.v3.oas.annotations.Parameter;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -54,9 +55,11 @@ public class Source implements Serializable {
     @Column(name= "file_path", nullable = true)
     public String filePath;
 
+    @JsonFormat(shape = JsonFormat.Shape.STRING)
     @Column(name="modified", nullable = false)
     public Date modified = new Date();
 
+    @JsonFormat(shape = JsonFormat.Shape.STRING)
     @Column(name="created", nullable = false)
     Date created = new Date();
 

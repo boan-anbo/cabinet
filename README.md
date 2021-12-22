@@ -1,3 +1,16 @@
+# Usage:
+
+## Tags:
+
+```
+[[KEY|VALUE|NOTE]]
+```
+
+Example:
+1. [[ARGUMENT|Key|Note]]
+# Swagger Url
+
+http://localhost:18081/swagger-ui.html
 
 # Key to compiling in Maven and Spring.
 
@@ -51,3 +64,5 @@ To do this, there are several requirements:
 `mvn clean package spring-boot:repackage`
 
 5. Keep in mind, Intellij compiling/packaging, Maven compiling/packaging, Spring compiling/packaging are all different processes.
+
+6. To get QueryDsl Entity, right click Maven cabinet, and `Generate Sources and Update Folder`

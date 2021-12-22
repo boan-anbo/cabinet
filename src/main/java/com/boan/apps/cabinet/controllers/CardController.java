@@ -4,6 +4,7 @@ import com.boan.apps.cabinet.consts.ExportFormat;
 import com.boan.apps.cabinet.dtos.CabinetResultMany;
 import com.boan.apps.cabinet.dtos.CabinetCardParams;
 import com.boan.apps.cabinet.dtos.CabinetResultOne;
+import com.boan.apps.cabinet.dtos.GetCardsByIdRequest;
 import com.boan.apps.cabinet.entities.Card;
 import com.boan.apps.cabinet.services.CardService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -37,11 +38,11 @@ public class CardController {
     }
 
     @Operation(
-            operationId = "exportCards",
-            summary = "export cards",
-            description = "export cards"
+            operationId = "exportCardsByParams",
+            summary = "export cards by params",
+            description = "export cards by params"
     )
-    @GetMapping(value = "export/{format}", produces = MediaType.TEXT_MARKDOWN_VALUE)
+    @GetMapping(value = "export/params/{format}", produces = MediaType.TEXT_MARKDOWN_VALUE + ";charset=UTF-8")
     @ResponseBody
     public String exportCards(@PathVariable ExportFormat format, @ParameterObject CabinetCardParams params) {
         params.includeMarkdown = true;
@@ -49,6 +50,18 @@ public class CardController {
         return String.join("\n", results.getMarkdown());
     }
 
+    @Operation(
+            operationId = "exportCardsById",
+            summary = "export cards by ids",
+            description = "export cards by ids"
+    )
+    @PostMapping(value = "export/ids/{format}", produces = MediaType.TEXT_MARKDOWN_VALUE + ";charset=UTF-8")
+    @ResponseBody
+    public String exportCards(@PathVariable ExportFormat format, @ParameterObject CabinetCardParams params, @RequestBody GetCardsByIdRequest request) {
+        params.includeMarkdown = true;
+        var results = cardService.getCardsById(params, request);
+        return String.join("\n", results.getMarkdown());
+    }
 
     @Operation(
             operationId = "getCardsByTags",
