@@ -3,12 +3,10 @@ package com.boan.apps.cabinet.dtos;
 import lombok.Data;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.format.annotation.DateTimeFormat;
 
-import java.time.LocalDate;
 import java.util.Date;
-import java.util.Dictionary;
-import java.util.List;
 
 
 @Data
@@ -33,8 +31,14 @@ public class CabinetCardParams {
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     Date modifiedDate;
 
+    String order = "desc";
+
+    String sortBy = "modified";
+
+
     public Pageable toPageable() {
-        return PageRequest.of(page, pageSize);
+        var sortOrder = this.order.equalsIgnoreCase("asc") ? Sort.Direction.ASC : Sort.Direction.DESC;
+        return PageRequest.of(page, pageSize, Sort.by(sortOrder, this.sortBy));
     }
 
 }
