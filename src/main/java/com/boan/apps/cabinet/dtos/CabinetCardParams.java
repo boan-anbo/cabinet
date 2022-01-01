@@ -30,6 +30,9 @@ public class CabinetCardParams {
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     Date toDate;
 
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+    Date modifiedDate;
+
     public Pageable toPageable() {
         return PageRequest.of(page, pageSize);
     }

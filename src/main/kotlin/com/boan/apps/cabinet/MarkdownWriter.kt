@@ -71,8 +71,8 @@ public class MarkdownWriter {
             }
             return lines
         }
-
-        private fun getAlternativeTitles(card: Card): String {
+        @JvmStatic
+        fun getAlternativeTitles(card: Card): String {
 
             val abbrevLength = 50;
 

@@ -1,7 +1,10 @@
 package com.boan.apps.cabinet.controllers;
 
+import com.boan.apps.cabinet.dtos.CabinetCardParams;
+import com.boan.apps.cabinet.dtos.CabinetResultMany;
 import com.boan.apps.cabinet.dtos.ExtractPdfRequest;
 import com.boan.apps.cabinet.dtos.SaveResults;
+import com.boan.apps.cabinet.entities.Card;
 import com.boan.apps.cabinet.services.PdfService;
 import com.boan.apps.cabinet.services.TaggerService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -30,11 +33,28 @@ public class PdfExtractorController {
 
 
     @SneakyThrows
-    @Operation(description = "Extract and store pdf.")
-    @PostMapping
-    public SaveResults extractAndStorePdf(@Valid @RequestBody ExtractPdfRequest request) throws IOException {
+    @Operation(description = "Extract and store pdf and return stats.")
+    @PostMapping(
+            value = "stats"
+    )
+    public SaveResults extractAndStorePdfAndReturnStats(@Valid @RequestBody ExtractPdfRequest request) throws IOException {
 
-        var cardsSaved = this.pdfService.ExtractAndStorePdf(request.filePaths);
+        var cardsSaved = this.pdfService.extractAndStoreManyPdfandReturnNumber(request.filePaths, true);
         return new SaveResults(cardsSaved, request.filePaths.size());
+    }
+
+
+    @SneakyThrows
+    @Operation(description = "Extract and store pdf and return cards stored.")
+    @PostMapping(
+            value = "cards"
+    )
+    public CabinetResultMany<Card> extractReturnCards(@Valid @RequestBody ExtractPdfRequest request) throws IOException {
+
+        var cardsSaved = this.pdfService.extractAndStoreManyPdfandReturnCards(request.filePaths, true);
+        var params = new CabinetCardParams();
+        params.setPage(1);
+        params.setPageSize(cardsSaved.size());
+        return new CabinetResultMany<Card>(cardsSaved, params);
     }
 }

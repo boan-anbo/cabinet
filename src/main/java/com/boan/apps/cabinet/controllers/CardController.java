@@ -59,7 +59,7 @@ public class CardController {
     @ResponseBody
     public String exportCards(@PathVariable ExportFormat format, @ParameterObject CabinetCardParams params, @RequestBody GetCardsByIdRequest request) {
         params.includeMarkdown = true;
-        var results = cardService.getCardsById(params, request);
+        var results = cardService.getCardsById(request, params);
         return String.join("\n", results.getMarkdown());
     }
 
@@ -92,11 +92,21 @@ public class CardController {
 
     @Operation(
             operationId = "getCardById",
-            summary = "get cards by card id.",
+            summary = "get card by card id.",
             description = "get one card by card id."
     )
     @GetMapping("/{cardId}")
     public CabinetResultOne<Card> getCardId(@PathVariable String cardId, @ParameterObject CabinetCardParams params) {
         return cardService.getCard(cardId, params);
+    }
+
+    @Operation(
+            operationId = "getCardsById",
+            summary = "get cards by card ids.",
+            description = "get cards by ids."
+    )
+    @PostMapping("")
+    public CabinetResultMany<Card> getCardsById(@RequestBody GetCardsByIdRequest request, @ParameterObject CabinetCardParams params) {
+        return cardService.getCardsById(request, params);
     }
 }

@@ -155,12 +155,22 @@ public class CardQueries {
                     card.comments.isNotEmpty()
             );
         }
-        if (params.getFromDate() != null) {
-            baseBooleans.and(card.modified.after(params.getFromDate()));
+
+        // date params
+        // if modified date is specificied use it, and ignore before and after dates.
+        if (params.getModifiedDate() != null) {
+            baseBooleans.and(card.modified.eq(params.getModifiedDate()));
+
+        } else {
+            // if modified date is not specificied but the before and after dates are, use them.
+            if (params.getFromDate() != null) {
+                baseBooleans.and(card.modified.after(params.getFromDate()));
+            }
+            if (params.getToDate() != null) {
+                baseBooleans.and(card.modified.before(params.getToDate()));
+            }
         }
-        if (params.getToDate() != null) {
-            baseBooleans.and(card.modified.before(params.getToDate()));
-        }
+
         return baseBooleans;
 
     }
