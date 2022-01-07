@@ -4,6 +4,9 @@ target/
 !**/src/main/**/target/
 !**/src/test/**/target/
 
+/clients/
+/cabinet-api-java-client/
+
 ### STS ###
 .apt_generated
 .classpath

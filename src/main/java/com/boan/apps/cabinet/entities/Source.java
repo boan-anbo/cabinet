@@ -40,6 +40,17 @@ public class Source implements Serializable {
     @Column(name = "text", nullable = true)
     String text = "";
 
+    // publication date
+    @Parameter(description = "date of publication")
+    @Column(name = "publication_date", nullable = true)
+    @JsonFormat(shape = JsonFormat.Shape.STRING)
+    Date publicationDate = new Date();
+
+    // citation information
+    @Parameter(description = "citation information")
+    @Column(name = "citation", nullable = true)
+    String citation = "";
+
     @Parameter(description = "the page from which text was taken from")
     @Column(name = "page_index", nullable = true)
     public int pageIndex;
