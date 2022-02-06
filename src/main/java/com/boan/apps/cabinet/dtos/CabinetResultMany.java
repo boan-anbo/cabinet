@@ -1,15 +1,11 @@
 package com.boan.apps.cabinet.dtos;
 
+import com.boan.apps.cabinet.consts.SelectorType;
 import com.boan.apps.cabinet.entities.Card;
-import com.boan.apps.cabinet.services.ExportService;
-import com.boan.apps.cabinet.tagger.Tagger;
 import com.boan.apps.cabinetKt.MarkdownWriter;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,6 +26,8 @@ public class CabinetResultMany<T> {
     public Boolean isFirst;
     public Boolean isLast;
     public Boolean isEmpty;
+    // list to filter the result;
+    public SelectorType selectorType;
 
 
     private CabinetResultMany(Page<T> pageInput, CabinetCardParams params) {
@@ -44,6 +42,7 @@ public class CabinetResultMany<T> {
         isFirst = pageInput.isFirst();
         isLast = pageInput.isLast();
         isEmpty = pageInput.isEmpty();
+        selectorType = params.selectorType;
 
 
         if (params.includeMarkdown) {

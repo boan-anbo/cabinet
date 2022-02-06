@@ -1,5 +1,6 @@
 package com.boan.apps.cabinet.query;
 
+import com.boan.apps.cabinet.consts.SelectorType;
 import com.boan.apps.cabinet.dtos.CabinetCardParams;
 import com.boan.apps.cabinet.entities.Card;
 import com.boan.apps.cabinet.entities.QCard;
@@ -9,10 +10,11 @@ import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.event.EventListener;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.support.Querydsl;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Repository;
+import org.springframework.web.server.ResponseStatusException;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -149,6 +151,31 @@ public class CardQueries {
     private BooleanBuilder getBaseBoolean(CabinetCardParams params) {
 
         var baseBooleans = new BooleanBuilder();
+
+
+        if (params.getSelectorType() != null && params.getSelectorType() != SelectorType.NONE) {
+            if (params.getSourceIdentifiers() == null || params.getSourceIdentifiers().isEmpty()) {
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Source identifiers must be provided when source identifier type is not NONE");
+            }
+
+            if (params.getSelectorType() == SelectorType.CARDID) {
+                baseBooleans.and(
+                        card.id.in(params.getSourceIdentifiers())
+                );
+            }
+
+            if (params.getSelectorType() == SelectorType.FILEPATH) {
+                baseBooleans.and(
+                        card.source.filePath.in(params.getSourceIdentifiers())
+                );
+            }
+
+            if (params.getSelectorType() == SelectorType.CITEKEY) {
+                baseBooleans.and(
+                        card.source.uniqueId.in(params.getSourceIdentifiers())
+                );
+            }
+        }
 
         if (params.getCommentedOnly()) {
             baseBooleans.and(

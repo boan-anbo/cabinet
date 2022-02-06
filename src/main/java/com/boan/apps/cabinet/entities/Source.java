@@ -10,6 +10,7 @@ import org.hibernate.annotations.GenericGenerator;
 import org.springframework.stereotype.Indexed;
 
 import javax.persistence.*;
+import java.io.File;
 import java.io.Serializable;
 import java.util.*;
 
@@ -66,6 +67,13 @@ public class Source implements Serializable {
     @Column(name = "file_path", nullable = true)
     public String filePath;
 
+    @Column(name = "dir_path", nullable = true)
+    public String dirPath;
+
+    @Column(name = "file_name", nullable = true)
+    public String fileName;
+
+
     @JsonFormat(shape = JsonFormat.Shape.STRING)
     @Column(name = "modified", nullable = false)
     public Date modified = new Date();
@@ -98,13 +106,22 @@ public class Source implements Serializable {
             if (_filePath != null && _filePath.length() > 0) {
 
                 setFilePath(_filePath);
+
+                // store dir path
+                var _dirPath = new File(_filePath).getParent();
+
+                if (_dirPath != null && _dirPath.length() > 0) {
+                    setDirPath(_dirPath);
+                }
             }
 
             var _fileName = info.getFileName();
             if (_fileName != null && _fileName.length() > 0) {
 
                 setTitle(_fileName);
+                setFileName(_fileName);
             }
+
 
             var _citeKey = info.getCiteKey();
             if (_citeKey != null && _citeKey.length() > 0) {

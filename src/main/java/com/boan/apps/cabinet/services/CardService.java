@@ -5,7 +5,7 @@ import com.boan.apps.cabinet.controllers.CardController;
 import com.boan.apps.cabinet.dtos.CabinetCardParams;
 import com.boan.apps.cabinet.dtos.CabinetResultMany;
 import com.boan.apps.cabinet.dtos.CabinetResultOne;
-import com.boan.apps.cabinet.dtos.GetCardsByIdRequest;
+import com.boan.apps.cabinet.dtos.GetCardsById;
 import com.boan.apps.cabinet.entities.Card;
 import com.boan.apps.cabinet.repositories.CardRepository;
 import org.slf4j.Logger;
@@ -25,13 +25,14 @@ public class CardService {
     @Autowired
     private CardRepository cardRepo;
 
+
     public CabinetResultMany<Card> getCardsByTags(List<String> keys, CabinetCardParams params) {
         var cardsPage = cardRepo.listCardsByTagKeyMany(keys, params, params.toPageable());
         // return keys back to the consumer.
         return CabinetResultMany.fromPage(cardsPage, params, keys);
     }
 
-    public CabinetResultMany<Card> getCardsById(GetCardsByIdRequest cardIds, CabinetCardParams params ) {
+    public CabinetResultMany<Card> getCardsById(GetCardsById cardIds, CabinetCardParams params ) {
         var search = params.getSearch();
         if (search != null && !search.isEmpty()) {
             return getCardsBySearching(params);
@@ -93,6 +94,7 @@ public class CardService {
 
     public List<Card> getCardsWithSameTextAndModifiedDate(PdfAnnotation annotation) {
         var cardsWithSameModifiedDate = getCardsByModifiedDate(annotation.getModifiedDate());
+
 
         var filteredCardsWithSameText = cardsWithSameModifiedDate
                 .getItems()

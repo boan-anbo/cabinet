@@ -1,10 +1,7 @@
 package com.boan.apps.cabinet.controllers;
 
 import com.boan.apps.cabinet.consts.ExportFormat;
-import com.boan.apps.cabinet.dtos.CabinetResultMany;
-import com.boan.apps.cabinet.dtos.CabinetCardParams;
-import com.boan.apps.cabinet.dtos.CabinetResultOne;
-import com.boan.apps.cabinet.dtos.GetCardsByIdRequest;
+import com.boan.apps.cabinet.dtos.*;
 import com.boan.apps.cabinet.entities.Card;
 import com.boan.apps.cabinet.services.CardService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -38,6 +35,32 @@ public class CardController {
     }
 
     @Operation(
+            operationId = "getCards by identifiers",
+            summary = "list cards by identifiers plus standard params. Identifiers include cardsIds etc",
+            description = "list cards by sources."
+    )
+    @PostMapping("")
+    public CabinetResultMany<Card> getCardsBySources(@RequestBody GetCardsByIdentifiers identifiersRequest, @ParameterObject CabinetCardParams params) {
+
+        // load post json body to the param.
+        params.loadSourceRequest(identifiersRequest, params.getSelectorType());
+
+        return cardService.getCards(params);
+    }
+
+//    @Operation(
+//            operationId = "getCardsById",
+//            summary = "get cards by card ids.",
+//            description = "get cards by ids."
+//    )
+//    @PostMapping("")
+//    public CabinetResultMany<Card> getCardsById(@RequestBody GetCardsById request, @ParameterObject CabinetCardParams params) {
+//        return cardService.getCardsById(request, params);
+//    }
+
+
+
+    @Operation(
             operationId = "exportCardsByParams",
             summary = "export cards by params",
             description = "export cards by params"
@@ -57,7 +80,7 @@ public class CardController {
     )
     @PostMapping(value = "export/ids/{format}", produces = MediaType.TEXT_MARKDOWN_VALUE + ";charset=UTF-8")
     @ResponseBody
-    public String exportCards(@PathVariable ExportFormat format, @ParameterObject CabinetCardParams params, @RequestBody GetCardsByIdRequest request) {
+    public String exportCards(@PathVariable ExportFormat format, @ParameterObject CabinetCardParams params, @RequestBody GetCardsById request) {
         params.includeMarkdown = true;
         var results = cardService.getCardsById(request, params);
         return String.join("\n", results.getMarkdown());
@@ -100,13 +123,4 @@ public class CardController {
         return cardService.getCard(cardId, params);
     }
 
-    @Operation(
-            operationId = "getCardsById",
-            summary = "get cards by card ids.",
-            description = "get cards by ids."
-    )
-    @PostMapping("")
-    public CabinetResultMany<Card> getCardsById(@RequestBody GetCardsByIdRequest request, @ParameterObject CabinetCardParams params) {
-        return cardService.getCardsById(request, params);
-    }
 }
