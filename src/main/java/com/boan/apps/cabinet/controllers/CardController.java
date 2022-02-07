@@ -35,7 +35,7 @@ public class CardController {
     }
 
     @Operation(
-            operationId = "getCards by identifiers",
+            operationId = "getCardsBySelectors",
             summary = "list cards by identifiers plus standard params. Identifiers include cardsIds etc",
             description = "list cards by sources."
     )

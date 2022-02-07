@@ -47,7 +47,7 @@ public class CardQueries {
         if (params.getSearchExact()) {
 
             baseBooleans = getBaseBoolean(params);
-            baseBooleans.or(
+            baseBooleans.and(
 
                     // card self properties
                     card.text.equalsIgnoreCase(text)
@@ -80,7 +80,7 @@ public class CardQueries {
         } else {
             baseBooleans = getBaseBoolean(params);
 
-            baseBooleans.or(
+            baseBooleans.and(
 
                     // card self properties
                     card.text.containsIgnoreCase(text)
