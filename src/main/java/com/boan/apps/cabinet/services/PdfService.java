@@ -22,8 +22,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicInteger;
 
 @Service
@@ -47,6 +45,51 @@ public class PdfService {
         var opt = new ExtractOptions();
 
         return PdfGongju.extractFullTextByPdfPath(filePath, opt);
+    }
+
+    /**
+     * @param filePath
+     * @param pageIndices the page indices to extract and return cards for.
+     * @param noDuplicate if true, will check if the card already exists in the database and skip it if it does.
+     * @return
+     * @throws IOException
+     */
+    public List<Card> extractAndStorePdfPagesAndReturnCards(String filePath, List<Integer> pageIndices, boolean noDuplicate) throws IOException {
+
+        var allResults = new ArrayList<Card>();
+
+
+        var hasAnnotations = PdfGongju.checkIfPdfFileHasAnnotations(filePath);
+
+
+        // todo refacatore pdfgongju core so that it can extract only pages requested to save traffic. But extracting the whole doc is good for now.
+        var extractResult = extractPdfDoc(filePath);
+
+        if (extractResult.isPresent()) {
+
+
+            var pdfDoc = extractResult.get().getExtractedPdf().stream().findFirst();
+
+            if (pdfDoc.isPresent()) {
+
+                if (pdfDoc.get().annotations.size() > 0) {
+                    var cardsSaved = storeMultipleAnnotationsByPdfDocument(pdfDoc.get(), noDuplicate, true);
+
+                    List<Card> cardsNeeded = cardsSaved.stream().filter(card -> {
+                        // if card's source's page index is listed in the pageIndices parameter, return true.
+                        return pageIndices.contains(card.getSource().getPageIndex());
+                    }).toList();
+                    allResults.addAll(cardsNeeded);
+                }
+            }
+
+        } else {
+            logger.warn("Skipped. Did not received result for " + filePath);
+        }
+        logger.info("Archivization finished. " + filePath + " files processed. " + allResults.size() + " stored.");
+
+
+        return allResults;
     }
 
 

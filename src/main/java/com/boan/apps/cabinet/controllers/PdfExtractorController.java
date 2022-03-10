@@ -1,9 +1,6 @@
 package com.boan.apps.cabinet.controllers;
 
-import com.boan.apps.cabinet.dtos.CabinetCardParams;
-import com.boan.apps.cabinet.dtos.CabinetResultMany;
-import com.boan.apps.cabinet.dtos.ExtractPdfRequest;
-import com.boan.apps.cabinet.dtos.SaveResults;
+import com.boan.apps.cabinet.dtos.*;
 import com.boan.apps.cabinet.entities.Card;
 import com.boan.apps.cabinet.services.PdfService;
 import com.boan.apps.cabinet.services.TaggerService;
@@ -52,6 +49,20 @@ public class PdfExtractorController {
     public CabinetResultMany<Card> extractReturnCards(@Valid @RequestBody ExtractPdfRequest request) throws IOException {
 
         var cardsSaved = this.pdfService.extractAndStoreManyPdfandReturnCards(request.filePaths, true);
+        var params = new CabinetCardParams();
+        params.setPage(1);
+        params.setPageSize(cardsSaved.size());
+        return new CabinetResultMany<Card>(cardsSaved, params);
+    }
+
+    @SneakyThrows
+    @Operation(description = "Extract and store pdf and return cards on specific pages.")
+    @PostMapping(
+            value = "cards_by_pages"
+    )
+    public CabinetResultMany<Card> extractCardsOnPages(@Valid @RequestBody ExtractPdfPagesRequest request) throws IOException {
+
+        var cardsSaved = this.pdfService.extractAndStorePdfPagesAndReturnCards(request.filePath, request.pageIndices,true);
         var params = new CabinetCardParams();
         params.setPage(1);
         params.setPageSize(cardsSaved.size());
