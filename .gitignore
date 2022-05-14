@@ -40,3 +40,5 @@ build/
 /client-generator/java-client/
 /client-generator/pdfgongju.core/
 /client-generator/
+
+/cabinet.db

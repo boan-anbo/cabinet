@@ -59,9 +59,6 @@ public class PdfService {
         var allResults = new ArrayList<Card>();
 
 
-        var hasAnnotations = PdfGongju.checkIfPdfFileHasAnnotations(filePath);
-
-
         // todo refacatore pdfgongju core so that it can extract only pages requested to save traffic. But extracting the whole doc is good for now.
         var extractResult = extractPdfDoc(filePath);
 
@@ -75,10 +72,14 @@ public class PdfService {
                 if (pdfDoc.get().annotations.size() > 0) {
                     var cardsSaved = storeMultipleAnnotationsByPdfDocument(pdfDoc.get(), noDuplicate, true);
 
-                    List<Card> cardsNeeded = cardsSaved.stream().filter(card -> {
-                        // if card's source's page index is listed in the pageIndices parameter, return true.
-                        return pageIndices.contains(card.getSource().getPageIndex());
-                    }).toList();
+                    // if an empty page index is provided, return all cards in the pdf.
+                    List<Card> cardsNeeded = pageIndices.size() > 0 ? cardsSaved
+                            .stream()
+                            .filter(card -> {
+                                // if card's source's page index is listed in the pageIndices parameter, return true.
+                                return pageIndices.contains(card.getSource().getPageIndex());
+                            })
+                            .toList() : cardsSaved;
                     allResults.addAll(cardsNeeded);
                 }
             }

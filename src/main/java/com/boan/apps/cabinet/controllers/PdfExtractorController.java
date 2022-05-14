@@ -1,5 +1,6 @@
 package com.boan.apps.cabinet.controllers;
 
+import boan.pdfgongju.core.models.ExtractResult;
 import com.boan.apps.cabinet.dtos.*;
 import com.boan.apps.cabinet.entities.Card;
 import com.boan.apps.cabinet.services.PdfService;
@@ -67,5 +68,17 @@ public class PdfExtractorController {
         params.setPage(1);
         params.setPageSize(cardsSaved.size());
         return new CabinetResultMany<Card>(cardsSaved, params);
+    }
+
+    @SneakyThrows
+    @Operation(description = "Extract pdf and return raw extraction results.")
+    @PostMapping(
+            value = "pdf"
+    )
+    public ExtractResult extractPdf(@Valid @RequestBody ExtractPdfRequestOne request) throws IOException {
+
+        var result = this.pdfService.extractPdfDoc(request.filePath);
+
+        return result.orElse(null);
     }
 }

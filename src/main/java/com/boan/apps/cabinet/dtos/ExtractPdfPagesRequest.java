@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -22,7 +23,7 @@ public class ExtractPdfPagesRequest {
      * An array with page indices of the pdf. All cards on the page indices will be returned to the user.
      */
     @NotNull
-    public List<Integer> pageIndices;
+    public List<Integer> pageIndices = new ArrayList<>();
 
     /**
      * Whether store all cards on all pages in the pdf, even though only cards on specified pages will be returned. If false, only cards on pageIndices will be returned.
