@@ -63,6 +63,9 @@ public class CabinetCardParams {
                 case CARDID -> {
                     this.setSourceIdentifiers(filterIndentifierRequest.getCardIds());
                 }
+                case TAGKEY -> {
+                    this.setSourceIdentifiers(filterIndentifierRequest.getTagKeys());
+                }
             }
 
             if (this.getSourceIdentifiers() == null || this.getSourceIdentifiers().isEmpty()) {

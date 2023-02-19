@@ -20,6 +20,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.util.List;
 import java.util.Locale;
+import java.util.stream.Collectors;
 
 @Repository
 public class CardQueries {
@@ -172,7 +173,15 @@ public class CardQueries {
 
             if (params.getSelectorType() == SelectorType.CITEKEY) {
                 baseBooleans.and(
-                        card.source.uniqueId.in(params.getSourceIdentifiers())
+                        // compare with lower cases
+                        card.source.uniqueId.toLowerCase().in(params.getSourceIdentifiers().stream().map(String::toLowerCase).collect(Collectors.toList()))
+                );
+            }
+
+            if (params.getSelectorType() == SelectorType.TAGKEY) {
+                baseBooleans.and(
+                        // ignore key cases
+                        card.tags.any().key.toLowerCase().in(params.getSourceIdentifiers().stream().map(String::toLowerCase).collect(Collectors.toList()))
                 );
             }
         }

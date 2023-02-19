@@ -13,7 +13,9 @@ public enum SelectorType {
     NONE("NONE"),
     CITEKEY("CITEKEY"),
     CARDID("CARDID"),
-    FILEPATH("FILEPATH");
+    FILEPATH("FILEPATH"),
+
+    TAGKEY("TAGKEY");
 
     private String code;
 
